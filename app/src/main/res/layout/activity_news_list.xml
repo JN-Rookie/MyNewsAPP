@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.feicui.mynewsapp.ui.NewsListActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include
+            layout="@layout/title_bar"
+            android:id="@+id/include"/>
+        <ListView
+            android:id="@+id/lv_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/include">
+
+        </ListView>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_left_frg"
+        android:layout_width="200dp"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:id="@+id/frg_left"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_right_frg"
+        android:layout_alignParentRight="true"
+        android:layout_width="200dp"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:id="@+id/frg_right"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+
+    </RelativeLayout>
+</RelativeLayout>
