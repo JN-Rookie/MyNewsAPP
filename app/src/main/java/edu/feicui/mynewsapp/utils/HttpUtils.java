@@ -14,6 +14,7 @@ import java.net.URL;
  * Created by Administrator on 2016/6/3.
  */
 public class HttpUtils {
+    private static final String TAG = "NewsListActivity";
     public static String getInfo(String path){
         String rs = null;
         BufferedReader reader = null;
@@ -45,6 +46,7 @@ public class HttpUtils {
                 e.printStackTrace();
             }
         }
+        Log.d(TAG, "getInfo: "+rs);
         return rs;
     }
 }
