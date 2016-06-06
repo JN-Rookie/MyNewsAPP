@@ -112,7 +112,7 @@ public class NewsListActivity extends AppCompatActivity implements OnRefreshList
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent=new Intent(NewsListActivity.this,WebActivity.class);
-                intent.putExtra("url", mAdapter.getItem(position).getLink());
+                intent.putExtra("url", mAdapter.getItem(position-1).getLink());
                 startActivity(intent);
             }
         });

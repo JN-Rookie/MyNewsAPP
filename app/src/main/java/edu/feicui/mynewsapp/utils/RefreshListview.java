@@ -142,7 +142,6 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
                     }
                     // 下拉头布局
                     headerView.setPadding(0, paddingTop, 0, 0);
-                    return true;
                 }
                 break;
             case MotionEvent.ACTION_UP :

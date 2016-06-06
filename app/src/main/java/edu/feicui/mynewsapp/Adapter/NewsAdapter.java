@@ -38,8 +38,6 @@ public class NewsAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private ImageLoader mImageLoader;
 
-
-
     public NewsAdapter(Context context,ImageLoader imageLoader) {
         mImageLoader=imageLoader;
         mInflater = LayoutInflater.from(context);
