@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <ImageView
+    <com.android.volley.toolbox.NetworkImageView
         android:layout_centerVertical="true"
         android:id="@+id/iv_newspic"
         android:layout_width="100dp"
@@ -12,7 +12,7 @@
         android:layout_margin="4dp"
         android:src="@mipmap/ic_launcher"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_centerVertical="true"
         android:layout_margin="4dp"
         android:id="@+id/layout"
@@ -30,13 +30,23 @@
             android:textSize="20sp"/>
 
         <TextView
+            android:layout_below="@+id/tv_newstitle"
             android:id="@+id/tv_newstext"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:textColor="#aa000000"
             android:text="helloword"
-            android:textSize="10sp"/>
+            android:textSize="15sp"/>
+        <TextView
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/tv_newsdate"
+            android:text="2016-06-17 17:31:20.0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

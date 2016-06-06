@@ -2,18 +2,27 @@ package edu.feicui.mynewsapp.ui;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import edu.feicui.mynewsapp.utils.BitmapUtils;
+import edu.feicui.mynewsapp.utils.RefreshListView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -23,8 +32,9 @@ import edu.feicui.mynewsapp.Adapter.NewsAdapter;
 import edu.feicui.mynewsapp.R;
 import edu.feicui.mynewsapp.bean.News;
 import edu.feicui.mynewsapp.utils.HttpUtils;
+import edu.feicui.mynewsapp.utils.OnRefreshListener;
 
-public class NewsListActivity extends AppCompatActivity {
+public class NewsListActivity extends AppCompatActivity implements OnRefreshListener {
     private static final String TAG = "NewsListActivity";
     private FragmentMenu      mFragmentMenu;//左菜单栏
     private FragmentMenuRight mFragmentMenuRight;//右菜单栏
@@ -37,12 +47,14 @@ public class NewsListActivity extends AppCompatActivity {
     private int x1, x2, x3;//定义屏幕X轴坐标
     private RelativeLayout.LayoutParams mLayoutParams;//主布局对象
     private int                         mWidth;//手机屏幕宽度
-    private ListView                    mListView;
+    private RefreshListView                    mListView;
     private List<News.DataBean>         mData;
     private NewsAdapter                 mAdapter;
     private Gson                        gson;
+    private ImageLoader mImageLoader;
     private static final String path="http://118.244.212.82:9092/" +
             "newsClient/news_list?ver=1&subid=1&dir=1&nid=5&stamp=20140321&cnt=20" ;
+    private RequestQueue mQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +62,13 @@ public class NewsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_list);
         initView();
         isFirstRun();
-        mAdapter=new NewsAdapter(this);
+        mQueue= Volley.newRequestQueue(getApplicationContext());
+        mImageLoader=new ImageLoader(mQueue,new BitmapUtils());
+        mAdapter=new NewsAdapter(this,mImageLoader);
         mListView.setAdapter(mAdapter);
         new AsyncTask<String, Void, News>() {
             @Override
             protected News doInBackground(String... params) {
-                Log.d(TAG, "doInBackground: "+222222);
                 String info = HttpUtils.getInfo(path);
                 mData=new ArrayList<>();
                 gson=new Gson();
@@ -70,7 +83,7 @@ public class NewsListActivity extends AppCompatActivity {
                 super.onPostExecute(dataBean);
             }
         }.execute();
-
+        mListView.setOnRefreshListener(this);
 
     }
 
@@ -81,7 +94,7 @@ public class NewsListActivity extends AppCompatActivity {
         rl_left_frg = (RelativeLayout) findViewById(R.id.rl_left_frg);
         rls_right_frg = (RelativeLayout) findViewById(R.id.rl_right_frg);
         rl_main = (RelativeLayout) findViewById(R.id.rl_main);
-        mListView = (ListView) findViewById(R.id.lv_list);
+        mListView = (RefreshListView) findViewById(R.id.lv_list);
         mButtonHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +105,15 @@ public class NewsListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getRightFragment();
+            }
+        });
+        mListView.setOnRefreshListener(this);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent=new Intent(NewsListActivity.this,WebActivity.class);
+                intent.putExtra("url", mAdapter.getItem(position).getLink());
+                startActivity(intent);
             }
         });
     }
@@ -198,6 +220,7 @@ public class NewsListActivity extends AppCompatActivity {
 //        return super.onTouchEvent(event);
 //    }
 
+//    实现左右滑动的方法
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         int action = ev.getAction();
@@ -235,5 +258,51 @@ public class NewsListActivity extends AppCompatActivity {
                 break;
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+//    实现listview的下拉刷新
+    @Override
+    public void onDownPullRefresh() {
+        new AsyncTask<String, Void, News>() {
+
+            @Override
+            protected News doInBackground(String... params) {
+                String info = HttpUtils.getInfo(path);
+                mData=new ArrayList<>();
+                gson=new Gson();
+                News bean = gson.fromJson(info, News.class);
+                return bean;
+            }
+//            添加完数据后,隐藏头部view
+            protected void onPostExecute(News dataBean) {
+                mAdapter.addData(dataBean.getData());
+                mAdapter.notifyDataSetChanged();
+                mListView.hideHeaderView();
+            }
+        }.execute();
+
+    }
+
+//    实现listview的上拉加载
+    @Override
+    public void onLoadingMore() {
+        new AsyncTask<String, Void, News>() {
+
+            @Override
+            protected News doInBackground(String... params) {
+                String info = HttpUtils.getInfo(path);
+                mData=new ArrayList<>();
+                gson=new Gson();
+                News bean = gson.fromJson(info, News.class);
+                return bean;
+            }
+//            添加完数据后,隐藏底部view
+            protected void onPostExecute(News dataBean) {
+                mAdapter.addData(dataBean.getData());
+                mAdapter.notifyDataSetChanged();
+                mListView.hideFooterView();
+            }
+        }.execute();
+
     }
 }
