@@ -23,6 +23,10 @@
         </activity>
         <activity android:name=".ui.WebActivity">
         </activity>
+        <activity android:name=".ui.LogonScreenActivity">
+        </activity>
+        <activity android:name=".ui.USERActivity">
+        </activity>
     </application>
 
 </manifest>

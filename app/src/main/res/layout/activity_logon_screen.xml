@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="4dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.feicui.mynewsapp.ui.LogonScreenActivity">
+    <TextView
+        android:background="#0442ed"
+        android:gravity="center"
+        android:textSize="40dp"
+        android:text="登陆界面"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_marginTop="100dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout">
+
+        <EditText
+            android:id="@+id/edt_name"
+            android:layout_margin="8dp"
+            android:textSize="20dp"
+            android:hint="账号"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/edt_psw"
+            android:textSize="20dp"
+            android:hint="密码"
+            android:inputType="numberPassword"
+            android:layout_margin="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <TextView
+        android:layout_margin="10dp"
+        android:textSize="20dp"
+        android:text="如果注册过的用户直接点击登陆,没有注册的用户请点击注册!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/linearLayout"
+        android:id="@+id/textView"/>
+    <Button
+        android:layout_margin="10dp"
+        android:id="@+id/btn_login"
+        android:gravity="center"
+        android:textSize="30dp"
+        android:text="登陆"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true"/>
+    <Button
+        android:id="@+id/btn_psw"
+        android:gravity="center"
+        android:textSize="30dp"
+        android:text="注册"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_login"
+        android:layout_alignParentStart="true"/>
+
+
+</RelativeLayout>
